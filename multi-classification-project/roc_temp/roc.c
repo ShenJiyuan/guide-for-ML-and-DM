@@ -1,0 +1,70 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+const int predicting_sample_number = 37786;
+void performance_calculate();
+
+int main()
+{
+       performance_calculate();
+}
+
+void performance_calculate()
+{
+	const int length_of_temp_standard = 10;
+	const int length_of_temp_result = 10;
+        //const int length_of_temp_roc = 10;
+	char temp_standard[length_of_temp_standard], temp_result[length_of_temp_result];
+
+	char filename_standard[20] = "standard.txt";
+        char filename_result[20]="result2.txt";
+	char filename_roc[20] = "roc.txt";
+
+	int TP = 0, TN = 0, FP = 0, FN = 0;
+	double TPR;
+        float FPR;
+	int countdown = predicting_sample_number;
+	int i;
+
+	FILE* fp_standard, *fp_result, *fp_roc;
+	fp_standard = fopen(filename_standard, "r");
+	fp_result = fopen(filename_result, "r");
+	fp_roc = fopen(filename_roc, "a");
+
+	memset(temp_standard, '\0', sizeof(temp_standard));
+	memset(temp_result, '\0', sizeof(temp_result));
+
+	while (countdown-->0)
+	{
+		fgets(temp_standard, length_of_temp_standard, fp_standard);
+		fgets(temp_result, length_of_temp_result, fp_result);
+		if (temp_standard[0] == '1')
+		if (temp_result[0] == '1')
+			TP++;
+		else
+			FN++;
+		else
+		if (temp_result[0] != '1')
+			TN++;
+		else
+			FP++;
+                
+                if (TP+FN==0) TPR=0;
+                else TPR = TP*1.0 / (TP + FN);
+                if (FP+TN==0) FPR=0;
+	        else FPR = FP*1.0 / (FP + TN);
+                fprintf(fp_roc,"%lf %f\n",TPR,FPR);
+	}
+	/*p = TP*1.0 / (TP + FP);
+	r = TP*1.0 / (TP + FN);
+	F1 = 2.0*r*p / (r + p);
+	TPR = TP*1.0 / (TP + FN);
+	FPR = FP*1.0 / (FP + TN);
+	fprintf(fp_performance, "precision = %f\nrecall = %f\nF1 = %f\nTPR = %f\nFPR = %f\ntraining time = %fs\ntesting time = %fs\n", p, r, F1, TPR, FPR, training_time, testing_time);*/
+	fclose(fp_standard);
+	fclose(fp_result);
+	fclose(fp_roc);
+}
+
