@@ -1,0 +1,7 @@
+precision = 0.945899
+recall = 0.888525
+F1 = 0.916314
+TPR = 0.888525
+FPR = 0.016238
+training time = 0.000152s
+testing time = 0.000137s
